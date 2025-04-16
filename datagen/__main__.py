@@ -1,7 +1,11 @@
+import time
 import typer
 from typing import List, Optional
 from .reader import read_source_file
 from .processor import process_data
+from .writer import write_batch
+
+from tqdm import tqdm
 
 app = typer.Typer()
 
@@ -37,6 +41,25 @@ def generate(
     batch_interval: float = typer.Option(
         0.5,
         help="Batch'ler arası bekleme süresi (sn)"
+    ),
+    output_folder: str = typer.Option(
+        help='Çıktıların kaydedileceği klasör'
+    ),
+    prefix: str = typer.Option(
+        'log_',
+        help="Çıktı dosya adı prefix'i"
+    ),
+    log_sep: str = typer.Option(
+        ',',
+        help="Çıktı CSV'leri için ayıraç"
+    ),
+    output_index: bool = typer.Option(
+        False,
+        help="Çıktıya DataFrame index bilgisi eklensin mi?"
+    ),
+    is_parquet: bool = typer.Option(
+        False,
+        help = "Çıktı dosya tipi Parquet mi?"
     )
 ):
     
@@ -57,6 +80,17 @@ def generate(
     )
     
     typer.echo("DataFrame başarılı bir şekilde batch'lere bölündü.")
+    
+    for batch in tqdm(batches, desc="Batch'ler kaydediliyor..."):
+        write_batch(
+            batch=batch,
+            output_folder=output_folder,
+            prefix=prefix,
+            log_sep=log_sep,
+            output_index=output_index,
+            is_parquet = is_parquet
+        )
+        time.sleep(batch_interval)
 
 if __name__ == "__main__":
     app()
