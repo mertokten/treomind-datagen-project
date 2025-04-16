@@ -104,3 +104,13 @@ def generate(
 
 if __name__ == "__main__":
     app()
+
+# python -m datagen --input-file ./data/iris.csv
+# python -m datagen --input-file ./data/iris.csv --exclude-cols SepalLengthCm --exclude-cols SepalWidthCm
+# python -m datagen --input-file ./data/iris.parquet --extension parquet
+# python -m datagen --input-file ./data/iris.parquet --extension parquet --exclude-cols PetalLengthCm --exclude-cols PetalWidthCm
+# python -m datagen --version
+# python -m datagen --input-file ./data/iris.csv --batch-size 5 --repeat 2
+# python -m datagen --input-file ./data/iris.parquet --extension parquet --batch-size 30 --repeat 4 --batch-interval 0.25 --shuffle
+# python -m datagen --input-file ./data/iris.csv --output-folder ./output/1
+# python -m datagen --input-file ./data/iris.parquet --extension parquet --output-folder ./output/2 --batch-size 5 --repeat 2 --shuffle
