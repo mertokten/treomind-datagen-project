@@ -1,6 +1,8 @@
 import time
 import typer
 from typing import List, Optional
+from typing_extensions import Annotated
+from .utils import version_callback
 from .reader import read_source_file
 from .processor import process_data
 from .writer import write_batch
@@ -60,7 +62,15 @@ def generate(
     is_parquet: bool = typer.Option(
         False,
         help = "Çıktı dosya tipi Parquet mi?"
-    )
+    ),
+    version: Annotated[
+        Optional[bool],
+        typer.Option(
+            '--version',
+            help='Get version info of the application.', 
+            callback=version_callback
+        )
+    ] = None
 ):
     
     df = read_source_file(
